@@ -1,0 +1,74 @@
+-- For inventory table
+DELETE FROM ims.dispensed_items;
+DELETE FROM ims.inventory;
+DELETE FROM ims.items;
+DELETE FROM ims.directus_settings;
+DELETE FROM ims.directus_files;
+
+DELETE FROM ims.generic_name;
+DELETE FROM ims.form_name;
+DELETE FROM ims.drug_classification;
+DELETE FROM ims.suppliers;
+
+
+-- INSERT IGNORE INTO ims.dispensed_items
+-- SELECT * FROM ims2.dispensed_items
+-- WHERE id NOT IN (SELECT id FROM ims.dispensed_items);
+
+
+INSERT IGNORE ims.directus_files
+SELECT * FROM ims2.directus_files
+WHERE id NOT IN (SELECT id FROM directus_files);
+
+INSERT IGNORE ims.directus_settings
+SELECT * FROM ims2.directus_settings
+WHERE id NOT IN (SELECT id FROM ims.directus_settings);
+
+INSERT IGNORE ims.generic_name
+SELECT * FROM ims2.generic_name
+WHERE id NOT IN (SELECT id FROM ims.generic_name);
+
+INSERT IGNORE ims.form_name
+SELECT * FROM ims2.form_name
+WHERE id NOT IN (SELECT id FROM ims.form_name);
+
+INSERT IGNORE ims.drug_classification
+SELECT * FROM ims2.drug_classification
+WHERE id NOT IN (SELECT id FROM ims.drug_classification);
+
+--- INSERT IGNORE ims.items
+--- SELECT * FROM ims2.items
+--- WHERE id NOT IN (SELECT id FROM ims.items);
+INSERT IGNORE INTO ims.items (
+    id, 
+    status, 
+    user_created, 
+    date_created, 
+    user_updated, 
+    date_updated, 
+    generic_name, 
+    form_name, 
+    image, 
+    item_name, 
+    drug_classification,vat_setup,critical_stock)
+SELECT 
+    id, 
+    status, 
+    user_created, 
+    date_created, 
+    user_updated, 
+    date_updated, 
+    generic_name, 
+    form_name, 
+    image, 
+    item_name, 
+    drug_classification,'','' FROM ims2.items
+
+
+INSERT IGNORE ims.inventory (id,status,user_created,date_created,user_updated,date_updated,item,quantity,a_quantity,branch_id)
+SELECT id,status,user_created,date_created,user_updated,date_updated,item,quantity,a_quantity,'ebbbac2a-f327-46e6-9bbc-a6ca4edcb893'
+FROM ims2.inventory
+
+INSERT IGNORE ims.suppliers
+SELECT * FROM ims2.suppliers
+WHERE id NOT IN (SELECT id FROM ims.suppliers);
